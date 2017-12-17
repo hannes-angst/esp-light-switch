@@ -1,9 +1,4 @@
-/* config.c
-*
-* Copyright (c) 2014-2015, Tuan PM <tuanpm at live dot com>
-* All rights reserved.
-*
-*/
+#include "c_types.h"
 #include "ets_sys.h"
 #include "os_type.h"
 #include "mem.h"
@@ -16,8 +11,7 @@ SYSCFG sysCfg;
 SYSCFG myCfg;
 SAVE_FLAG saveFlag;
 
-void ICACHE_FLASH_ATTR
-CFG_Default()
+void ICACHE_FLASH_ATTR CFG_Default()
 {
   INFO("CONFIG: Use default configuration\r\n");
   os_memset(&sysCfg, 0x00, sizeof(sysCfg));
@@ -31,8 +25,7 @@ CFG_Default()
   CFG_Save();
 }
 
-void ICACHE_FLASH_ATTR
-CFG_Save()
+void ICACHE_FLASH_ATTR CFG_Save()
 {
   if (os_memcmp(&myCfg, &sysCfg, sizeof(sysCfg))) {
     INFO("CONFIG: Save configuration to flash ...\r\n");
@@ -47,8 +40,7 @@ CFG_Save()
   }
 }
 
-void ICACHE_FLASH_ATTR
-CFG_Load()
+void ICACHE_FLASH_ATTR CFG_Load()
 {
   INFO("CONFIG: Load configuration from flash ...\r\n");
   spi_flash_read((CFG_LOCATION + 3) * SPI_FLASH_SEC_SIZE, (uint32 *)&saveFlag, sizeof(SAVE_FLAG));

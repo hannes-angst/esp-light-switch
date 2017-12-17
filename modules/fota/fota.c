@@ -39,8 +39,7 @@ ota_restart() {
 	}
 }
 
-LOCAL void ICACHE_FLASH_ATTR
-ota_start_esp_connect(struct espconn *conn, void *connect_cb, void *disconnect_cb, void *reconn_cb) {
+LOCAL void ICACHE_FLASH_ATTR ota_start_esp_connect(struct espconn *conn, void *connect_cb, void *disconnect_cb, void *reconn_cb) {
 	espconn_regist_connectcb(conn, connect_cb);
 	espconn_regist_disconcb(conn, disconnect_cb);
 	espconn_regist_reconcb(conn, reconn_cb);
@@ -51,8 +50,7 @@ ota_start_esp_connect(struct espconn *conn, void *connect_cb, void *disconnect_c
 	}
 }
 
-LOCAL void ICACHE_FLASH_ATTR
-ota_response(void *arg) {
+LOCAL void ICACHE_FLASH_ATTR ota_response(void *arg) {
 	struct upgrade_server_info *server = arg;
 
 	if (server->upgrade_flag == true) {

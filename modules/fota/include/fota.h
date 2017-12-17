@@ -1,13 +1,8 @@
 #ifndef _FOTA_H_
 #define _FOTA_H_
 
-/*
-* Only http is supported but a different port may be used.
-* The following urls are handled correctly:
-*   http://sidnas2:80/api/sensor1/user1.bin
-*   http://sidnas2/api/sensor1/user1.bin
-*   sidnas2/api/sensor1/user1.bin
-*/
+#include <c_types.h>
+
 void ICACHE_FLASH_ATTR start_ota(char *url);
 
 #endif

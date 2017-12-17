@@ -1,6 +1,14 @@
+# config
+*.local.h
+
 # esp8266
 build
 firmware
+
+#eclipse
+.settings
+.project
+.cproject
 
 # Prerequisites
 *.d

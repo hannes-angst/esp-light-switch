@@ -1,5 +1,5 @@
-#ifndef USER_CONFIG_H_
-#define USER_CONFIG_H_
+#ifndef APP_CONFIG_H_
+#define APP_CONFIG_H_
 
 typedef struct{
   uint32_t cfg_holder; //2
@@ -21,4 +21,4 @@ void ICACHE_FLASH_ATTR CFG_Default();
 
 extern SYSCFG sysCfg;
 
-#endif /* USER_CONFIG_H_ */
+#endif /* APP_CONFIG_H_ */

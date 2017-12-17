@@ -337,21 +337,6 @@ else
 endif
 endif
 
-flash: all
-ifeq ($(app), 0)
-	$(ESPTOOL) -p $(ESPPORT) -b $(BAUD) write_flash $(flashimageoptions) 0x00000 $(FW_BASE)/eagle.flash.bin 0x10000 $(FW_BASE)/eagle.irom0text.bin
-	"C:\Program Files (x86)\PuTTY\putty.exe" -load  "COM3@74880"
-else
-ifeq ($(boot), none)
-	$(ESPTOOL) -p $(ESPPORT) -b $(BAUD) write_flash $(flashimageoptions) 0x00000 $(FW_BASE)/eagle.flash.bin 0x10000 $(FW_BASE)/eagle.irom0text.bin
-	"C:\Program Files (x86)\PuTTY\putty.exe" -load  "COM3@74880"
-else
-	$(ESPTOOL) -p $(ESPPORT) -b $(BAUD) write_flash $(flashimageoptions) $(addr) $(FW_BASE)/upgrade/$(BIN_NAME).bin
-	"C:\Program Files (x86)\PuTTY\putty.exe" -load  "COM3@74880"
-endif
-endif
-
-
 
 
 # ===============================================================
