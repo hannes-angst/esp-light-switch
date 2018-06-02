@@ -1,16 +1,9 @@
-/*
- * wifi.c
- *
- *  Created on: Dec 30, 2014
- *      Author: Minh
- */
 #include "wifi.h"
 #include "user_interface.h"
 #include "osapi.h"
 #include "espconn.h"
 #include "os_type.h"
 #include "mem.h"
-#include "mqtt_msg.h"
 #include "user_config.h"
 
 static ETSTimer WiFiLinker;
@@ -25,7 +18,7 @@ static void ICACHE_FLASH_ATTR wifi_check_ip(void *arg)
   if (wifiStatus == STATION_GOT_IP && ipConfig.ip.addr != 0)
   {
     os_timer_setfn(&WiFiLinker, (os_timer_func_t *)wifi_check_ip, NULL);
-    os_timer_arm(&WiFiLinker, 10017, 0);
+    os_timer_arm(&WiFiLinker, 2000, 0);
   }
   else
   {
@@ -43,10 +36,6 @@ static void ICACHE_FLASH_ATTR wifi_check_ip(void *arg)
     {
       INFO("STATION_CONNECT_FAIL\r\n");
       wifi_station_connect();
-    }
-    else
-    {
-      INFO("STATION_IDLE\r\n");
     }
 
     os_timer_setfn(&WiFiLinker, (os_timer_func_t *)wifi_check_ip, NULL);

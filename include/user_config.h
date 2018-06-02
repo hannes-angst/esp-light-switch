@@ -7,9 +7,9 @@
 #define MQTT_HOST     			"192.168.13.100"
 #define MQTT_PORT     			1883
 #define MQTT_KEEPALIVE    		30  /*second*/
-#define MQTT_RECONNECT_TIMEOUT  10  /*second*/
+#define MQTT_RECONNECT_TIMEOUT  	10  /*second*/
 #define MQTT_CLEAN_SESSION 		1
-#define MQTT_BUF_SIZE   		1024
+#define MQTT_BUF_SIZE   			1024
 #define MQTT_CLIENT_ID    		"ESP"
 
 #define PROTOCOL_NAMEv311
@@ -17,13 +17,10 @@
 
 #define MQTT_TOPIC_BASE		"/angst/devices"
 #define MQTT_DISCOVER		MQTT_TOPIC_BASE"/discovery/"
-#define MQTT_SET_NAME		"name"
-#define MQTT_OTA			"ota"
 #define MQTT_ABOUT			"about"
 #define MQTT_STATUS    		"status"
 #define MQTT_STATUS_ONLINE  "online"
 #define MQTT_STATUS_OFFLINE "offline"
-#define MQTT_STATUS_OTA_UP  "updating"
 #define MQTT_CLIENT_TYPE    "switch"
 
 #define APP_NAME        "Remote Switch"
@@ -56,7 +53,7 @@
 #define TOC_MUX       PERIPHS_IO_MUX_MTMS_U
 #define TOC_FUNC      FUNC_GPIO14
 
-#define STATES        10             // loops per second
+#define STATES        5             // loops per second
 #define ON        	  1
 #define OFF        	  0
 #define BLINK_5	  	  10
@@ -66,14 +63,6 @@
 
 //SSL disabled
 //#define MQTT_SSL_ENABLE
-
-
-//1015808 F8000
-#define CFG_HOLDER      0x20164711   // Change this value to load default configurations
-#define CFG_LOCATION    0x1FE		// Please don't change or if you know what you doing
-//#define CFG_LOCATION  0xF8         // Please don't change or if you know what you doing
-//#define CFG_LOCATION	0x79	/* Please don't change or if you know what you doing */
-//#define CFG_LOCATION	0x3C	/* Please don't change or if you know what you doing */
 
 #define LOCAL_CONFIG_AVAILABLE
 
@@ -96,13 +85,13 @@
 #endif
 
 #ifdef INFO_LEVEL
-#define MQTT_DEBUG_ON
 #define INFO( format, ... ) os_printf( "[INFO] " format, ## __VA_ARGS__ )
 #else
 #define INFO( format, ... )
 #endif
 
 #ifdef DEBUG_LEVEL
+#define MQTT_DEBUG_ON
 #define DEBUG( format, ... ) os_printf( "[DEBUG] " format, ## __VA_ARGS__ )
 #else
 #define DEBUG( format, ... )

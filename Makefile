@@ -1,11 +1,5 @@
 #############################################################
-#
-# Root Level Makefile
-#
-# Version 2.0
-#
-# (c) by CHERTS <sleuthhound@gmail.com>
-#
+# ESP 82666 
 #############################################################
 
 BUILD_BASE	= build
@@ -28,13 +22,13 @@ BAUD ?= 921600
 # BOOT = none
 # BOOT = old - boot_v1.1
 # BOOT = new - boot_v1.2+
-BOOT?=new
+BOOT?=none
 # APP = 0 - eagle.flash.bin + eagle.irom0text.bin
 # APP = 1 - user1.bin
 # APP = 2 - user2.bin
-APP?=1
+APP?=0
 # SPI_SPEED = 40, 26, 20, 80
-SPI_SPEED ?= 80
+SPI_SPEED ?= 40
 # SPI_MODE: QIO, QOUT, DIO, DOUT
 SPI_MODE ?= QIO
 # SPI_SIZE_MAP
@@ -46,7 +40,7 @@ SPI_MODE ?= QIO
 # 5 : 2048 KB (1024 KB + 1024 KB)
 # 6 : 4096 KB (1024 KB + 1024 KB)
 # 7 : 8192 KB (1024 KB + 1024 KB)
-SPI_SIZE_MAP ?=2
+SPI_SIZE_MAP ?=0
 #2
 #0
 
@@ -170,7 +164,7 @@ endif
 TARGET = app
 
 # which modules (subdirectories) of the project to include in compiling
-MODULES	= user modules/info modules/mqtt modules/wifi modules/app_config modules/fota
+MODULES	= user modules/info modules/mqtt modules/wifi
 EXTRA_INCDIR = include $(SDK_BASE)/../extra/include
 
 # libraries used in this project, mainly provided by the SDK
@@ -210,8 +204,7 @@ ifneq ($(app),0)
 	    endif
 	  endif
 	endif
-	BIN_NAME = user$(app)
-	# .$(flash).$(boot).$(size_map)
+	BIN_NAME = user$(app).$(flash).$(boot).$(size_map)
 	CFLAGS += -DAT_UPGRADE_SUPPORT
 endif
 else
@@ -299,7 +292,7 @@ else
             ifeq ($(size_map), 5)
 		$(vecho) "Support boot_v1.4 and +"
             else
-		$(vecho) "Support boot_v1.6 and +"
+		$(vecho) "Support boot_v1.2 and +"
             endif
         endif
     endif
@@ -332,12 +325,31 @@ else
 	$(vecho) "Flash boot_v1.1 and +"
 	$(ESPTOOL) -p $(ESPPORT) -b $(BAUD) write_flash $(flashimageoptions) 0x00000 $(SDK_BASE)/bin/boot_v1.1.bin
     else
-	$(vecho) "Flash boot_v1.6 and +"
-	$(ESPTOOL) -p $(ESPPORT) -b $(BAUD) write_flash $(flashimageoptions) 0x00000 $(SDK_BASE)/bin/boot_v1.6.bin
-endif
+    	ifeq ($(size_map), 6)
+		$(vecho) "Flash boot_v1.5 and +"
+		$(ESPTOOL) -p $(ESPPORT) -b $(BAUD) write_flash $(flashimageoptions) 0x00000 $(SDK_BASE)/bin/boot_v1.6.bin
+        else
+            ifeq ($(size_map), 5)
+		$(vecho) "Flash boot_v1.5 and +"
+		$(ESPTOOL) -p $(ESPPORT) -b $(BAUD) write_flash $(flashimageoptions) 0x00000 $(SDK_BASE)/bin/boot_v1.6.bin
+            else
+		$(vecho) "Flash boot_v1.2 and +"
+		$(ESPTOOL) -p $(ESPPORT) -b $(BAUD) write_flash $(flashimageoptions) 0x00000 $(SDK_BASE)/bin/boot_v1.2.bin
+            endif
+        endif
+    endif
 endif
 
-
+flash: all
+ifeq ($(app), 0)
+	$(ESPTOOL) -p $(ESPPORT) -b $(BAUD) write_flash $(flashimageoptions) 0x00000 $(FW_BASE)/eagle.flash.bin 0x10000 $(FW_BASE)/eagle.irom0text.bin
+else
+ifeq ($(boot), none)
+	$(ESPTOOL) -p $(ESPPORT) -b $(BAUD) write_flash $(flashimageoptions) 0x00000 $(FW_BASE)/eagle.flash.bin 0x10000 $(FW_BASE)/eagle.irom0text.bin
+else
+	$(ESPTOOL) -p $(ESPPORT) -b $(BAUD) write_flash $(flashimageoptions) $(addr) $(FW_BASE)/upgrade/$(BIN_NAME).bin
+endif
+endif
 
 # ===============================================================
 # From http://bbs.espressif.com/viewtopic.php?f=10&t=305
@@ -361,11 +373,6 @@ endif
 flashinit:
 	$(vecho) "Flash init data default and blank data."
 	$(ESPTOOL) -p $(ESPPORT) write_flash $(flashimageoptions) 0x7c000 $(SDK_BASE)/bin/esp_init_data_default.bin 0x7e000 $(SDK_BASE)/bin/blank.bin
-
-flashinitVDD:
-	$(vecho) "Flash init data default and blank data."
-	$(ESPTOOL) -p $(ESPPORT) write_flash $(flashimageoptions) 0x7c000 $(SDK_BASE)/bin/esp_init_data_vdd.bin 0x7e000 $(SDK_BASE)/bin/blank.bin
-
 
 rebuild: clean all
 
